@@ -1,2 +1,2 @@
 # misokinn-catcher
-みそきんを確保する
+みそきんを確保するiOSアプリ
