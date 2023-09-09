@@ -96,6 +96,12 @@ CREATE TABLE reviews (
 );
 ```
 
+日本語対応
+
+```
+ALTER TABLE Reviews MODIFY review TEXT CHARACTER SET utf8mb4;
+```
+
 ```
 INSERT INTO reviews (reviews_id, store_id, stock, post_time, review) VALUES
 (1, 1, 0, '2023-09-08 10:00:00', '素晴らしい商品です！'),
@@ -109,38 +115,6 @@ INSERT INTO reviews (reviews_id, store_id, stock, post_time, review) VALUES
 (9, 9, 2, '2023-09-08 10:40:00', '商品の説明と異なる部分がありました。'),
 (10, 10, 0, '2023-09-08 10:45:00', 'サポートが非常に親切でした。'),
 (11, 7, 0, '2023-09-08 11:00:00', '全体的に満足しています。');
-```
-
-### stock_status テーブル作成
-
-必ず先に reviews テーブルを作成してください。
-
-```
-CREATE TABLE stock_status (
-    store_id INT PRIMARY KEY,
-    latest_stock INT,
-    post_time DATETIME
-);
-```
-
-日本語サポート
-
-```
-ALTER TABLE Reviews MODIFY review TEXT CHARACTER SET utf8mb4;
-```
-
-```
-INSERT INTO stock_status (store_id, latest_stock, post_time)
-SELECT r.store_id, r.stock, r.post_time
-FROM reviews r
-JOIN (
-    SELECT store_id, MAX(post_time) as latest_time
-    FROM reviews
-    GROUP BY store_id
-) subq ON r.store_id = subq.store_id AND r.post_time = subq.latest_time
-ON DUPLICATE KEY UPDATE
-    latest_stock = VALUES(latest_stock),
-    post_time = VALUES(post_time);
 ```
 
 ## 接続したい DB への情報
