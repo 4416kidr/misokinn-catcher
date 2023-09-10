@@ -16,6 +16,43 @@ const Review = () => {
 
   const stores = ['店舗1', '店舗2', '店舗3'];  // 仮の店舗データ
 
+  const submitReview = async () => {
+    try {
+      const storeMap = {
+        '店舗1': 1,
+        '店舗2': 2,
+        '店舗3': 3,
+      };
+      const stockMap = {
+        '○': 1,
+        '△': 2,
+        '×': 3,
+      };
+
+      const storeId = storeMap[selectedStore];
+      const stockValue = stockMap[stockStatus]
+      const postTime = new Date().toISOString();
+
+      const response = await fetch('http://43.207.103.12:8080/reviews', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          store_id: storeID,
+          stock: stockValue,
+          post_time: postTime,
+          review: reviewText,
+        }),
+      });
+
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error("There was an error postiong the review:", error);
+    }
+  };
+
   return (
     <View style={styles.container}>
 
@@ -59,9 +96,7 @@ const Review = () => {
 
       {/* 投稿ボタン */}
       <View style={styles.submitButton}>
-        <Button title="投稿する" onPress={() => {
-          // ここで投稿処理を行う
-        }} />
+        <Button title="投稿する" onPress={submitReview} />
       </View>
 
     </View>
